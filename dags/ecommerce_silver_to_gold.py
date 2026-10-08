@@ -114,8 +114,7 @@ def ecommerce_silber_to_gold():
             for obj in response.get("Contents", [])
         )
         print(f"keys = {keys}")
-        log.log(f"keys = {keys}")
-
+        
         return keys
         pass
 

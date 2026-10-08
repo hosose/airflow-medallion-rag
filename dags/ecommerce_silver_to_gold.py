@@ -60,7 +60,7 @@ def s3_client():
     # 태그
     tags = ["madallion", "gold", "rag", "vector"]
 )
-def ecommerce_silber_to_gold():
+def ecommerce_silver_to_gold():
     # TASK (@task 구성, taskgroup(n개 task 그룹화))
     # T1. silver partition 확인 (작업해도 되는지 점검)
     wait_for_silver = S3KeySensor(
@@ -148,6 +148,41 @@ def ecommerce_silber_to_gold():
     # 여기까지 도달 => silver에 데이터가 정상적으로 구성되어 있다 
     silver_meta = inspect_silver( process_date )
 
+    # 2개의 병렬 작업 task 구성 (분석(task, task, ...), 지식(task, task,....) )
+    @task_group(group_id="analytics_gold")
+    def analytics_gold(process_date: str):
+        return {}
+
+    @task_group(group_id="knowlegde_rag")
+    def knowlegde_rag(process_date: str):
+        return {}
+
+    # 각각 task 그룹 실행->호출
+    analytics_result = analytics_gold( process_date )
+    knowlegd_result  = knowlegde_rag( process_date )
+
+    # 2개의 tak 그룹을 병렬 fan-out 구성
+    silver_meta >> [
+        analytics_result,
+        knowlegd_result
+    ]
+
+    # 마무리 task 구성 -> DAG의 최종 상태 구성
+    @task
+    def finish( silver_meta: dict[str, Any],
+                analytics_result: dict[str, Any],
+                knowlegd_result:dict[str, Any]
+               ):
+        return {}
+        
+    # 의존성 마지막 구성 -> 각각 작업이 완료된 후 진행됨 -> fan-in
+    finish(
+        silver_meta,
+        analytics_result,
+        knowlegd_result
+    )
+
+
     pass
 
-ecommerce_silber_to_gold()
+ecommerce_silver_to_gold()

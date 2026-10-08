@@ -114,7 +114,18 @@ def ecommerce_silber_to_gold():
             for obj in response.get("Contents", [])
         )
         print(f"keys = {keys}")
-        
+
+        # 실버 파일 목록이 계획한대로 구성되었는지 조사
+        required = {
+            "orders.csv",
+            "refunds.csv",
+            "reviews.csv",
+            "cs_tickets.csv",
+            "products.csv",
+            "policies.csv",
+            "_SUCCESS",
+        }
+
         return keys
         pass
 

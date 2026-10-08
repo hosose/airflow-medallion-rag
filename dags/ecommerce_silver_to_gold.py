@@ -1,4 +1,21 @@
 # 모듈가져오기
+from __future__ import annotations
+import hashlib
+import io
+import json
+import math
+import os
+from datetime import timedelta
+from typing import Any
+import boto3
+import pandas as pd
+import pendulum
+import logging
+from airflow.sdk import Param, dag, task, task_group, get_current_context # 필수요소
+from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
 
 # 전역변수(환경변수)
 

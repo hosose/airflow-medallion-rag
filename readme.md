@@ -84,5 +84,12 @@ s3://ECOMMERCE_BUCKET/
         - image 구성
     - 설치
         ```
-            docker compose up -d --build
+            docker compose up -d --build        
         ```
+- 대시보드 접속
+    - http://localhost:8080
+
+- 계정 조회
+    ```
+        docker compose exec airflow cat /opt/airflow/simple_auth_manager_passwords.json.generated
+    ```

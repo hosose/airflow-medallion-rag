@@ -13,7 +13,7 @@ load_dotenv()
 def main():
     # 2026-10-08일 정보를 인자로 전달
     # 강제로 전달 하는 이유는 브론즈 -> 실버 airflow dag가 없어서 임의로 편성
-    # python script/upload_silver.py --date 2026-10-08
+    # python -m scripts.upload_silver --date 2026-10-08
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", required=True)
     args = parser.parse_args()

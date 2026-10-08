@@ -26,7 +26,10 @@ log                 = logging.getLogger(__name__)
 # 공용/공통등 함수
 # s3 client 함수
 def s3_client():
-    return boto3.client("s3", region_name=AWS_REGION)
+    # airflow ui에 등록한 커넥션 정보를 활용
+    hook = S3Hook(aws_conn_id="aws_default")
+    return hook.get_conn()
+    #return boto3.client("s3", region_name=AWS_REGION)
 
 
 # DAG (@dag), 특정 함수에 @dag 데커레이터 추가하면 DAG 구성됨
@@ -118,7 +121,7 @@ def ecommerce_silber_to_gold():
 
     # task 연결
     silver_meta = inspect_silver( process_date )
-    
+
     pass
 
 ecommerce_silber_to_gold()

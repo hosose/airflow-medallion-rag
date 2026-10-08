@@ -62,3 +62,16 @@ L sample_data
 ```
 python -m scripts.upload_silver --date 2026-10-08
 ```
+- 최종 s3
+```text
+s3://ECOMMERCE_BUCKET/
+└── silver/
+    └── dt=2026-10-08/
+        ├── products.csv
+        ├── orders.csv
+        ├── refunds.csv
+        ├── reviews.csv
+        ├── cs_tickets.csv
+        ├── policies.csv
+        └── _SUCCESS
+```

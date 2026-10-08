@@ -70,12 +70,25 @@ def ecommerce_silber_to_gold():
         timeout     = 60*10,
         # 대기중에 계속 점유하지 않도록 재스케줄링 모드로 적용
         mode        = "reschedule"
-
     )
 
-
+    # 2번째 task -> 함수형 구성
+    @task # 함수위에 @task 테커레이터가 부여되면 task로 구성됨
+    def resolve_process_date() -> str:
+        '''
+            airflow context에서 정보 획득
+        '''
+        context = get_current_context()
+        # 코드 레벨로 파라미터 값을 추출(컨텍스트를 통해서)
+        return context['params']['process_date']
+    
+    # TI(task instance)r가 생성됨
+    process_date = resolve_process_date()
+    
     # 의존성(3.x 방향석 지시, task의 결과를 새로 넣으면서진행, 병렬 진행, fan-in/fan-out 구성)
     # task >> task
+    # 필요시 계속 추가
+    wait_for_silver >> process_date
     pass
 
 ecommerce_silber_to_gold()

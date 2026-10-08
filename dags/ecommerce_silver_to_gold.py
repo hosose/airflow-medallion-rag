@@ -137,13 +137,15 @@ def ecommerce_silber_to_gold():
         if missing:
             raise ValueError(f"missing Silver files: { missing }")
 
-
-
-
-        return keys
-        pass
+        # 메타 정보 => XCom에 게시
+        return {
+            "process_date": process_date,
+            "prefix" : prefix,
+            "file_count" : len(keys)
+        }        
 
     # task 연결
+    # 여기까지 도달 => silver에 데이터가 정상적으로 구성되어 있다 
     silver_meta = inspect_silver( process_date )
 
     pass

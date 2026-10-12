@@ -511,6 +511,25 @@ def ecommerce_silver_to_gold():
                 # ecommerce_db : airflow > 커넥션 정보 등록
                 postgres_conn_id = "ecommerce_db"
             )
+            # 커넥션 획득
+            conn = hook.get_conn()
+            # 예외 처리 -> 실패를 대배하여 롤백 처리를 위해 구성
+            try:
+                with conn.cursor() as cur:
+                    pass
+                # 최종 반영
+                conn.commit()
+            except Exception:
+                conn.rollback() # 부분 적제 하지 않도록 트렌젝션 전체 롤백
+                raise
+            finally:
+                conn.close()
+
+            # 반환 정보
+            return {
+                "status": "loaded",
+                
+            }
 
         
         # 6. 실제 적제된 행수 조회 , 품질 확인 task(검증)

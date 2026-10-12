@@ -107,6 +107,19 @@ def chunk_text(text: str,               # 문장 원본 데이터
 
 # 토큰화
 def bedrock_embedding(text: str) -> list[float]:
+    clinet = boto3.client("bedrock-runtime", region_name=BEDROCK_REGION)
+
+    response = clinet.invoke_model(
+        modelId=BEDROCK_EMBED_MODEL,
+        body = json.dumps({
+            "InputText": text,
+            "demensions": 1024, # 외부 env 구성 가능
+            "normalize": True   # 유사도 게산에 유리하게 적용되도록(쉽게), 정규화 처리 세팅
+        })
+    )
+    # dict 변환
+    payload = json.loads( response["body"].read() )
+    return payload["embedding"]
     pass
 
 # 임베딩

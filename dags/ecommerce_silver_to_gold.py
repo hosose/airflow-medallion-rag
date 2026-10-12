@@ -610,8 +610,6 @@ def ecommerce_silver_to_gold():
                         ]
                         
                     )
-
-                    pass
                 # 최종 반영
                 conn.commit()
             except Exception:
@@ -621,9 +619,12 @@ def ecommerce_silver_to_gold():
                 conn.close()
 
             # 반환 정보
+            # 적제된 문서수, 청크수, 사용된 임베딩 모델의 공급자
             return {
                 "status": "loaded",
-                
+                "documents": len(documents),
+                "chunks": len(chunks),
+                "embedding_provider": ( embedding_meta["provider"], )
             }
 
         

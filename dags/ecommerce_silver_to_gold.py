@@ -647,9 +647,17 @@ def ecommerce_silver_to_gold():
                 with conn.cursor() as cur:
                     # 현재 배치 작업의 기준 => dt값 2026-10-12 기준으로 데이터를 조회(카운트)
                     cur.execute("""
-                    
-                    """)
-                    doc_count = cur.fetchone() # 디비상에 해당날짜의 적제된 데이터 수
+                        select count(*)
+                        from knowledge_documents
+                        where process_date=%s
+                    """, (process_date, ))
+                    doc_count = cur.fetchone()[0]   # 디비상에 해당날짜의 적제된 데이터 수
+                    cur.execute("""
+                        select count(*)
+                        from document_chunks
+                        where process_date=%s             
+                    """, (process_date, ))
+                    chunk_count = cur.fetchone()[0] # 디비상에 해당날짜의 적제된 데이터 수
                     pass
             except Exception:
                 raise

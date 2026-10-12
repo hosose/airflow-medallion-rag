@@ -397,7 +397,7 @@ def ecommerce_silver_to_gold():
             # csv => dt => dict => jsonl
             key = (
                 f"gold/knowledge/dt={process_date}/"
-                "document.jsonl"
+                "documents.jsonl"
             )
         
             # jsonl 내용 구성 s3 업로드 처리
@@ -453,7 +453,7 @@ def ecommerce_silver_to_gold():
             # 키 생성 
             key = (
                 f"gold/knowledge/dt={process_date}/"
-                "chunk.jsonl"
+                "chunks.jsonl"
             )
             # s3에 업로드
             return write_jsonl_s3(chunks, key)
@@ -480,7 +480,19 @@ def ecommerce_silver_to_gold():
                     )
                 })
 
-            pass
+            # 키 생성 
+            key = (
+                f"gold/knowledge/dt={process_date}/"
+                "embeddings.jsonl"
+            )
+            # s3에 업로드
+            result = write_jsonl_s3(embedded, key)
+
+            # 추가 정보 삽입 (메타 정보, 임베딩모델 공급자, 차원정보(임베딩되는 데이터 단위))
+            result["provider"]   = EMBEDDING_PROVIDER
+            result["dimensions"] = 1024
+
+            return result
         
         # 5. postgreSQL/pgVector 적제 -> Load
         @task

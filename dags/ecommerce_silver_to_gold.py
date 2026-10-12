@@ -589,8 +589,26 @@ def ecommerce_silver_to_gold():
                     execute_values(
                         cur,
                         """
+                            insert into document_chunks (
+                                chunk_id,
+                                document_id,
+                                process_date,
+                                chunk_index,
+                                source_type,
+                                product_id,
+                                event_time,
+                                content,
+                                metadata,
+                                embedding
+                            )
+                            values %s
                         """,
-                        chunk_rows
+                        [
+                            row[:-1]
+                            + (f"[{ ",".join( str(float(v)) for v in row[-1] ) }]")
+                            for row in chunk_rows
+                        ]
+                        
                     )
 
                     pass

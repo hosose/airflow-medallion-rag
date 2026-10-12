@@ -424,7 +424,15 @@ def ecommerce_silver_to_gold():
                         # 메타데이터(문서원문 메타데이터 활용)
                         "metadata": doc['metadata']
                     })             
-            pass
+
+            # 키 생성 
+            key = (
+                f"gold/knowledge/dt={process_date}/"
+                "chunk.jsonl"
+            )
+            # s3에 업로드
+            return write_jsonl_s3(chunks, key)
+        
         # 4. 임베딩 -> 백터화
         @task
         def create_embedding(chuck_meta: dict[str, Any], 

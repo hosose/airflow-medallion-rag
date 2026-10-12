@@ -570,6 +570,17 @@ def ecommerce_silver_to_gold():
                         document_rows
                     )
 
+                    # 청크데이터 삽입
+                    chunk_rows = [
+
+                    ]
+                    execute_values(
+                        cur,
+                        """
+                        """,
+                        chunk_rows
+                    )
+
                     pass
                 # 최종 반영
                 conn.commit()
